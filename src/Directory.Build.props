@@ -6,7 +6,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright 2026 Dedalus</Copyright>
     <PackageProjectUrl>https://docs.dedaluslabs.ai</PackageProjectUrl>
-    <RepositoryUrl>https://www.github.com/stainless-sdks/dedalus-csharp</RepositoryUrl>
+    <RepositoryUrl>https://www.github.com/dedalus-labs/dedalus-csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
     <!-- Documentation-->
