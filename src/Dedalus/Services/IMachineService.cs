@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Dedalus.Core;
@@ -28,28 +27,22 @@ public interface IMachineService
     /// </summary>
     IMachineService WithOptions(Func<ClientOptions, ClientOptions> modifier);
 
-    IArtifactService Artifacts { get; }
-
-    IPreviewService Previews { get; }
-
     ISshService Ssh { get; }
 
     IExecutionService Executions { get; }
-
-    ITerminalService Terminals { get; }
 
     /// <summary>
     /// Create machine
     /// </summary>
     Task<Machine> Create(
-        MachineCreateParams parameters,
+        MachineCreateParams? parameters = null,
         CancellationToken cancellationToken = default
     );
 
     /// <summary>
     /// Get machine
     /// </summary>
-    Task<Machine> Retrieve(
+    Task<MachineRetrieveResponse> Retrieve(
         MachineRetrieveParams parameters,
         CancellationToken cancellationToken = default
     );
@@ -90,16 +83,6 @@ public interface IMachineService
     /// Wake a sleeping machine
     /// </summary>
     Task<Machine> Wake(MachineWakeParams parameters, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Streams machine lifecycle updates over Server-Sent Events. Each `status` event
-    /// contains a full `LifecycleResponse` payload. The stream closes after the machine
-    /// reaches its current desired state.
-    /// </summary>
-    IAsyncEnumerable<Machine> WatchStreaming(
-        MachineWatchParams parameters,
-        CancellationToken cancellationToken = default
-    );
 }
 
 /// <summary>
@@ -115,22 +98,16 @@ public interface IMachineServiceWithRawResponse
     /// </summary>
     IMachineServiceWithRawResponse WithOptions(Func<ClientOptions, ClientOptions> modifier);
 
-    IArtifactServiceWithRawResponse Artifacts { get; }
-
-    IPreviewServiceWithRawResponse Previews { get; }
-
     ISshServiceWithRawResponse Ssh { get; }
 
     IExecutionServiceWithRawResponse Executions { get; }
 
-    ITerminalServiceWithRawResponse Terminals { get; }
-
     /// <summary>
     /// Returns a raw HTTP response for <c>post /v1/machines</c>, but is otherwise the
-    /// same as <see cref="IMachineService.Create(MachineCreateParams, CancellationToken)"/>.
+    /// same as <see cref="IMachineService.Create(MachineCreateParams?, CancellationToken)"/>.
     /// </summary>
     Task<HttpResponse<Machine>> Create(
-        MachineCreateParams parameters,
+        MachineCreateParams? parameters = null,
         CancellationToken cancellationToken = default
     );
 
@@ -138,7 +115,7 @@ public interface IMachineServiceWithRawResponse
     /// Returns a raw HTTP response for <c>get /v1/machines/{machine_id}</c>, but is otherwise the
     /// same as <see cref="IMachineService.Retrieve(MachineRetrieveParams, CancellationToken)"/>.
     /// </summary>
-    Task<HttpResponse<Machine>> Retrieve(
+    Task<HttpResponse<MachineRetrieveResponse>> Retrieve(
         MachineRetrieveParams parameters,
         CancellationToken cancellationToken = default
     );
@@ -185,15 +162,6 @@ public interface IMachineServiceWithRawResponse
     /// </summary>
     Task<HttpResponse<Machine>> Wake(
         MachineWakeParams parameters,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>
-    /// Returns a raw HTTP response for <c>get /v1/machines/{machine_id}/status/stream</c>, but is otherwise the
-    /// same as <see cref="IMachineService.WatchStreaming(MachineWatchParams, CancellationToken)"/>.
-    /// </summary>
-    Task<StreamingHttpResponse<Machine>> WatchStreaming(
-        MachineWatchParams parameters,
         CancellationToken cancellationToken = default
     );
 }

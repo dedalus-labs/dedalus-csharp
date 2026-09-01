@@ -18,16 +18,7 @@ public class MachineListItemTest : TestBase
             DesiredState = MachineListItemDesiredState.Running,
             MachineID = "machine_id",
             MemoryMiB = 0,
-            Status = new()
-            {
-                LastProgressAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                LastTransitionAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                Phase = Phase.Accepted,
-                Reason = "reason",
-                Retryable = true,
-                Revision = "revision",
-                LastError = "last_error",
-            },
+            Phase = MachineListItemPhase.Accepted,
             StorageGiB = 0,
             Vcpu = 0,
         };
@@ -38,16 +29,7 @@ public class MachineListItemTest : TestBase
             MachineListItemDesiredState.Running;
         string expectedMachineID = "machine_id";
         long expectedMemoryMiB = 0;
-        LifecycleStatus expectedStatus = new()
-        {
-            LastProgressAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-            LastTransitionAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-            Phase = Phase.Accepted,
-            Reason = "reason",
-            Retryable = true,
-            Revision = "revision",
-            LastError = "last_error",
-        };
+        ApiEnum<string, MachineListItemPhase> expectedPhase = MachineListItemPhase.Accepted;
         long expectedStorageGiB = 0;
         double expectedVcpu = 0;
 
@@ -56,7 +38,7 @@ public class MachineListItemTest : TestBase
         Assert.Equal(expectedDesiredState, model.DesiredState);
         Assert.Equal(expectedMachineID, model.MachineID);
         Assert.Equal(expectedMemoryMiB, model.MemoryMiB);
-        Assert.Equal(expectedStatus, model.Status);
+        Assert.Equal(expectedPhase, model.Phase);
         Assert.Equal(expectedStorageGiB, model.StorageGiB);
         Assert.Equal(expectedVcpu, model.Vcpu);
     }
@@ -71,16 +53,7 @@ public class MachineListItemTest : TestBase
             DesiredState = MachineListItemDesiredState.Running,
             MachineID = "machine_id",
             MemoryMiB = 0,
-            Status = new()
-            {
-                LastProgressAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                LastTransitionAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                Phase = Phase.Accepted,
-                Reason = "reason",
-                Retryable = true,
-                Revision = "revision",
-                LastError = "last_error",
-            },
+            Phase = MachineListItemPhase.Accepted,
             StorageGiB = 0,
             Vcpu = 0,
         };
@@ -104,16 +77,7 @@ public class MachineListItemTest : TestBase
             DesiredState = MachineListItemDesiredState.Running,
             MachineID = "machine_id",
             MemoryMiB = 0,
-            Status = new()
-            {
-                LastProgressAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                LastTransitionAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                Phase = Phase.Accepted,
-                Reason = "reason",
-                Retryable = true,
-                Revision = "revision",
-                LastError = "last_error",
-            },
+            Phase = MachineListItemPhase.Accepted,
             StorageGiB = 0,
             Vcpu = 0,
         };
@@ -131,16 +95,7 @@ public class MachineListItemTest : TestBase
             MachineListItemDesiredState.Running;
         string expectedMachineID = "machine_id";
         long expectedMemoryMiB = 0;
-        LifecycleStatus expectedStatus = new()
-        {
-            LastProgressAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-            LastTransitionAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-            Phase = Phase.Accepted,
-            Reason = "reason",
-            Retryable = true,
-            Revision = "revision",
-            LastError = "last_error",
-        };
+        ApiEnum<string, MachineListItemPhase> expectedPhase = MachineListItemPhase.Accepted;
         long expectedStorageGiB = 0;
         double expectedVcpu = 0;
 
@@ -149,7 +104,7 @@ public class MachineListItemTest : TestBase
         Assert.Equal(expectedDesiredState, deserialized.DesiredState);
         Assert.Equal(expectedMachineID, deserialized.MachineID);
         Assert.Equal(expectedMemoryMiB, deserialized.MemoryMiB);
-        Assert.Equal(expectedStatus, deserialized.Status);
+        Assert.Equal(expectedPhase, deserialized.Phase);
         Assert.Equal(expectedStorageGiB, deserialized.StorageGiB);
         Assert.Equal(expectedVcpu, deserialized.Vcpu);
     }
@@ -164,16 +119,7 @@ public class MachineListItemTest : TestBase
             DesiredState = MachineListItemDesiredState.Running,
             MachineID = "machine_id",
             MemoryMiB = 0,
-            Status = new()
-            {
-                LastProgressAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                LastTransitionAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                Phase = Phase.Accepted,
-                Reason = "reason",
-                Retryable = true,
-                Revision = "revision",
-                LastError = "last_error",
-            },
+            Phase = MachineListItemPhase.Accepted,
             StorageGiB = 0,
             Vcpu = 0,
         };
@@ -191,16 +137,7 @@ public class MachineListItemTest : TestBase
             DesiredState = MachineListItemDesiredState.Running,
             MachineID = "machine_id",
             MemoryMiB = 0,
-            Status = new()
-            {
-                LastProgressAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                LastTransitionAt = DateTimeOffset.Parse("2019-12-27T18:11:19.117Z"),
-                Phase = Phase.Accepted,
-                Reason = "reason",
-                Retryable = true,
-                Revision = "revision",
-                LastError = "last_error",
-            },
+            Phase = MachineListItemPhase.Accepted,
             StorageGiB = 0,
             Vcpu = 0,
         };
@@ -263,6 +200,78 @@ public class MachineListItemDesiredStateTest : TestBase
         );
         string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
         var deserialized = JsonSerializer.Deserialize<ApiEnum<string, MachineListItemDesiredState>>(
+            json,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+}
+
+public class MachineListItemPhaseTest : TestBase
+{
+    [Theory]
+    [InlineData(MachineListItemPhase.Accepted)]
+    [InlineData(MachineListItemPhase.PlacementPending)]
+    [InlineData(MachineListItemPhase.Starting)]
+    [InlineData(MachineListItemPhase.Running)]
+    [InlineData(MachineListItemPhase.Stopping)]
+    [InlineData(MachineListItemPhase.Sleeping)]
+    [InlineData(MachineListItemPhase.Destroying)]
+    [InlineData(MachineListItemPhase.Destroyed)]
+    [InlineData(MachineListItemPhase.Failed)]
+    public void Validation_Works(MachineListItemPhase rawValue)
+    {
+        // force implicit conversion because Theory can't do that for us
+        ApiEnum<string, MachineListItemPhase> value = rawValue;
+        value.Validate();
+    }
+
+    [Fact]
+    public void InvalidEnumValidationThrows_Works()
+    {
+        var value = JsonSerializer.Deserialize<ApiEnum<string, MachineListItemPhase>>(
+            JsonSerializer.SerializeToElement("invalid value"),
+            ModelBase.SerializerOptions
+        );
+
+        Assert.NotNull(value);
+        Assert.Throws<DedalusInvalidDataException>(() => value.Validate());
+    }
+
+    [Theory]
+    [InlineData(MachineListItemPhase.Accepted)]
+    [InlineData(MachineListItemPhase.PlacementPending)]
+    [InlineData(MachineListItemPhase.Starting)]
+    [InlineData(MachineListItemPhase.Running)]
+    [InlineData(MachineListItemPhase.Stopping)]
+    [InlineData(MachineListItemPhase.Sleeping)]
+    [InlineData(MachineListItemPhase.Destroying)]
+    [InlineData(MachineListItemPhase.Destroyed)]
+    [InlineData(MachineListItemPhase.Failed)]
+    public void SerializationRoundtrip_Works(MachineListItemPhase rawValue)
+    {
+        // force implicit conversion because Theory can't do that for us
+        ApiEnum<string, MachineListItemPhase> value = rawValue;
+
+        string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, MachineListItemPhase>>(
+            json,
+            ModelBase.SerializerOptions
+        );
+
+        Assert.Equal(value, deserialized);
+    }
+
+    [Fact]
+    public void InvalidEnumSerializationRoundtrip_Works()
+    {
+        var value = JsonSerializer.Deserialize<ApiEnum<string, MachineListItemPhase>>(
+            JsonSerializer.SerializeToElement("invalid value"),
+            ModelBase.SerializerOptions
+        );
+        string json = JsonSerializer.Serialize(value, ModelBase.SerializerOptions);
+        var deserialized = JsonSerializer.Deserialize<ApiEnum<string, MachineListItemPhase>>(
             json,
             ModelBase.SerializerOptions
         );

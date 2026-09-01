@@ -10,14 +10,14 @@ public class MachineUpdateParamsTest : TestBase
     {
         var parameters = new MachineUpdateParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             Autosleep = "autosleep",
             MemoryMiB = 0,
             StorageGiB = 0,
             Vcpu = 0,
         };
 
-        string expectedMachineID = "dm-3";
+        string expectedMachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c";
         string expectedAutosleep = "autosleep";
         long expectedMemoryMiB = 0;
         long expectedStorageGiB = 0;
@@ -33,7 +33,10 @@ public class MachineUpdateParamsTest : TestBase
     [Fact]
     public void OptionalNonNullableParamsUnsetAreNotSet_Works()
     {
-        var parameters = new MachineUpdateParams { MachineID = "dm-3" };
+        var parameters = new MachineUpdateParams
+        {
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+        };
 
         Assert.Null(parameters.Autosleep);
         Assert.False(parameters.RawBodyData.ContainsKey("autosleep"));
@@ -50,7 +53,7 @@ public class MachineUpdateParamsTest : TestBase
     {
         var parameters = new MachineUpdateParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
 
             // Null should be interpreted as omitted for these properties
             Autosleep = null,
@@ -72,12 +75,20 @@ public class MachineUpdateParamsTest : TestBase
     [Fact]
     public void Url_Works()
     {
-        MachineUpdateParams parameters = new() { MachineID = "dm-3" };
+        MachineUpdateParams parameters = new()
+        {
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+        };
 
         var url = parameters.Url(new() { ApiKey = "My API Key" });
 
         Assert.True(
-            TestBase.UrisEqual(new Uri("https://dcs.dedaluslabs.ai/v1/machines/dm-3"), url)
+            TestBase.UrisEqual(
+                new Uri(
+                    "https://dcs.dedaluslabs.ai/v1/machines/dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c"
+                ),
+                url
+            )
         );
     }
 
@@ -86,7 +97,7 @@ public class MachineUpdateParamsTest : TestBase
     {
         var parameters = new MachineUpdateParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             Autosleep = "autosleep",
             MemoryMiB = 0,
             StorageGiB = 0,

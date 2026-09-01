@@ -10,13 +10,13 @@ public class ExecutionEventsParamsTest : TestBase
     {
         var parameters = new ExecutionEventsParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             ExecutionID = "execution_id",
             Cursor = "cursor",
             Limit = 0,
         };
 
-        string expectedMachineID = "dm-3";
+        string expectedMachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c";
         string expectedExecutionID = "execution_id";
         string expectedCursor = "cursor";
         long expectedLimit = 0;
@@ -32,7 +32,7 @@ public class ExecutionEventsParamsTest : TestBase
     {
         var parameters = new ExecutionEventsParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             ExecutionID = "execution_id",
         };
 
@@ -47,7 +47,7 @@ public class ExecutionEventsParamsTest : TestBase
     {
         var parameters = new ExecutionEventsParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             ExecutionID = "execution_id",
 
             // Null should be interpreted as omitted for these properties
@@ -66,7 +66,7 @@ public class ExecutionEventsParamsTest : TestBase
     {
         ExecutionEventsParams parameters = new()
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             ExecutionID = "execution_id",
             Cursor = "cursor",
             Limit = 0,
@@ -77,7 +77,7 @@ public class ExecutionEventsParamsTest : TestBase
         Assert.True(
             TestBase.UrisEqual(
                 new Uri(
-                    "https://dcs.dedaluslabs.ai/v1/machines/dm-3/executions/execution_id/events?cursor=cursor&limit=0"
+                    "https://dcs.dedaluslabs.ai/v1/machines/dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c/executions/execution_id/events?cursor=cursor&limit=0"
                 ),
                 url
             )
@@ -89,7 +89,7 @@ public class ExecutionEventsParamsTest : TestBase
     {
         var parameters = new ExecutionEventsParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             ExecutionID = "execution_id",
             Cursor = "cursor",
             Limit = 0,

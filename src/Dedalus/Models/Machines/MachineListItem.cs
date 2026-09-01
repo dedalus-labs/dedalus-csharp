@@ -70,14 +70,14 @@ public sealed record class MachineListItem : JsonModel
         init { this._rawData.Set("memory_mib", value); }
     }
 
-    public required LifecycleStatus Status
+    public required ApiEnum<string, MachineListItemPhase> Phase
     {
         get
         {
             this._rawData.Freeze();
-            return this._rawData.GetNotNullClass<LifecycleStatus>("status");
+            return this._rawData.GetNotNullClass<ApiEnum<string, MachineListItemPhase>>("phase");
         }
-        init { this._rawData.Set("status", value); }
+        init { this._rawData.Set("phase", value); }
     }
 
     public required long StorageGiB
@@ -111,7 +111,7 @@ public sealed record class MachineListItem : JsonModel
         this.DesiredState.Validate();
         _ = this.MachineID;
         _ = this.MemoryMiB;
-        this.Status.Validate();
+        this.Phase.Validate();
         _ = this.StorageGiB;
         _ = this.Vcpu;
     }
@@ -189,6 +189,71 @@ sealed class MachineListItemDesiredStateConverter : JsonConverter<MachineListIte
                 MachineListItemDesiredState.Running => "running",
                 MachineListItemDesiredState.Sleeping => "sleeping",
                 MachineListItemDesiredState.Destroyed => "destroyed",
+                _ => throw new DedalusInvalidDataException(
+                    string.Format("Invalid value '{0}' in {1}", value, nameof(value))
+                ),
+            },
+            options
+        );
+    }
+}
+
+[JsonConverter(typeof(MachineListItemPhaseConverter))]
+public enum MachineListItemPhase
+{
+    Accepted,
+    PlacementPending,
+    Starting,
+    Running,
+    Stopping,
+    Sleeping,
+    Destroying,
+    Destroyed,
+    Failed,
+}
+
+sealed class MachineListItemPhaseConverter : JsonConverter<MachineListItemPhase>
+{
+    public override MachineListItemPhase Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        return JsonSerializer.Deserialize<string>(ref reader, options) switch
+        {
+            "accepted" => MachineListItemPhase.Accepted,
+            "placement_pending" => MachineListItemPhase.PlacementPending,
+            "starting" => MachineListItemPhase.Starting,
+            "running" => MachineListItemPhase.Running,
+            "stopping" => MachineListItemPhase.Stopping,
+            "sleeping" => MachineListItemPhase.Sleeping,
+            "destroying" => MachineListItemPhase.Destroying,
+            "destroyed" => MachineListItemPhase.Destroyed,
+            "failed" => MachineListItemPhase.Failed,
+            _ => (MachineListItemPhase)(-1),
+        };
+    }
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        MachineListItemPhase value,
+        JsonSerializerOptions options
+    )
+    {
+        JsonSerializer.Serialize(
+            writer,
+            value switch
+            {
+                MachineListItemPhase.Accepted => "accepted",
+                MachineListItemPhase.PlacementPending => "placement_pending",
+                MachineListItemPhase.Starting => "starting",
+                MachineListItemPhase.Running => "running",
+                MachineListItemPhase.Stopping => "stopping",
+                MachineListItemPhase.Sleeping => "sleeping",
+                MachineListItemPhase.Destroying => "destroying",
+                MachineListItemPhase.Destroyed => "destroyed",
+                MachineListItemPhase.Failed => "failed",
                 _ => throw new DedalusInvalidDataException(
                     string.Format("Invalid value '{0}' in {1}", value, nameof(value))
                 ),

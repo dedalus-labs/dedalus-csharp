@@ -11,7 +11,7 @@ public class ExecutionCreateParamsTest : TestBase
     {
         var parameters = new ExecutionCreateParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             Command = ["string"],
             Cwd = "cwd",
             Env = new Dictionary<string, string>() { { "foo", "string" } },
@@ -19,7 +19,7 @@ public class ExecutionCreateParamsTest : TestBase
             TimeoutMs = 0,
         };
 
-        string expectedMachineID = "dm-3";
+        string expectedMachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c";
         List<string> expectedCommand = ["string"];
         string expectedCwd = "cwd";
         Dictionary<string, string> expectedEnv = new() { { "foo", "string" } };
@@ -49,7 +49,11 @@ public class ExecutionCreateParamsTest : TestBase
     [Fact]
     public void OptionalNonNullableParamsUnsetAreNotSet_Works()
     {
-        var parameters = new ExecutionCreateParams { MachineID = "dm-3", Command = ["string"] };
+        var parameters = new ExecutionCreateParams
+        {
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+            Command = ["string"],
+        };
 
         Assert.Null(parameters.Cwd);
         Assert.False(parameters.RawBodyData.ContainsKey("cwd"));
@@ -66,7 +70,7 @@ public class ExecutionCreateParamsTest : TestBase
     {
         var parameters = new ExecutionCreateParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             Command = ["string"],
 
             // Null should be interpreted as omitted for these properties
@@ -89,13 +93,19 @@ public class ExecutionCreateParamsTest : TestBase
     [Fact]
     public void Url_Works()
     {
-        ExecutionCreateParams parameters = new() { MachineID = "dm-3", Command = ["string"] };
+        ExecutionCreateParams parameters = new()
+        {
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+            Command = ["string"],
+        };
 
         var url = parameters.Url(new() { ApiKey = "My API Key" });
 
         Assert.True(
             TestBase.UrisEqual(
-                new Uri("https://dcs.dedaluslabs.ai/v1/machines/dm-3/executions"),
+                new Uri(
+                    "https://dcs.dedaluslabs.ai/v1/machines/dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c/executions"
+                ),
                 url
             )
         );
@@ -106,7 +116,7 @@ public class ExecutionCreateParamsTest : TestBase
     {
         var parameters = new ExecutionCreateParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             Command = ["string"],
             Cwd = "cwd",
             Env = new Dictionary<string, string>() { { "foo", "string" } },

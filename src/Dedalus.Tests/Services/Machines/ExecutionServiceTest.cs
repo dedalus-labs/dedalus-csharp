@@ -8,7 +8,7 @@ public class ExecutionServiceTest : TestBase
     public async Task Create_Works()
     {
         var execution = await this.client.Machines.Executions.Create(
-            new() { MachineID = "dm-3", Command = ["string"] },
+            new() { MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c", Command = ["string"] },
             TestContext.Current.CancellationToken
         );
         execution.Validate();
@@ -18,7 +18,11 @@ public class ExecutionServiceTest : TestBase
     public async Task Retrieve_Works()
     {
         var execution = await this.client.Machines.Executions.Retrieve(
-            new() { MachineID = "dm-3", ExecutionID = "execution_id" },
+            new()
+            {
+                MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+                ExecutionID = "execution_id",
+            },
             TestContext.Current.CancellationToken
         );
         execution.Validate();
@@ -28,7 +32,7 @@ public class ExecutionServiceTest : TestBase
     public async Task List_Works()
     {
         var page = await this.client.Machines.Executions.List(
-            new() { MachineID = "dm-3" },
+            new() { MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c" },
             TestContext.Current.CancellationToken
         );
         page.Validate();
@@ -38,7 +42,11 @@ public class ExecutionServiceTest : TestBase
     public async Task Delete_Works()
     {
         var execution = await this.client.Machines.Executions.Delete(
-            new() { MachineID = "dm-3", ExecutionID = "execution_id" },
+            new()
+            {
+                MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+                ExecutionID = "execution_id",
+            },
             TestContext.Current.CancellationToken
         );
         execution.Validate();
@@ -48,7 +56,11 @@ public class ExecutionServiceTest : TestBase
     public async Task Events_Works()
     {
         var page = await this.client.Machines.Executions.Events(
-            new() { MachineID = "dm-3", ExecutionID = "execution_id" },
+            new()
+            {
+                MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+                ExecutionID = "execution_id",
+            },
             TestContext.Current.CancellationToken
         );
         page.Validate();
@@ -58,7 +70,11 @@ public class ExecutionServiceTest : TestBase
     public async Task Output_Works()
     {
         var executionOutput = await this.client.Machines.Executions.Output(
-            new() { MachineID = "dm-3", ExecutionID = "execution_id" },
+            new()
+            {
+                MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+                ExecutionID = "execution_id",
+            },
             TestContext.Current.CancellationToken
         );
         executionOutput.Validate();

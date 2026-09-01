@@ -100,26 +100,6 @@ To send a request to the Dedalus API, build an instance of some `Params` class a
 
 For example, `client.Machines.Create` should be called with an instance of `MachineCreateParams`, and it will return an instance of `Task<Machine>`.
 
-## Streaming
-
-The SDK defines methods that return response "chunk" streams, where each chunk can be individually processed as soon as it arrives instead of waiting on the full response. Streaming methods generally correspond to [SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) or [JSONL](https://jsonlines.org) responses.
-
-Some of these methods may have streaming and non-streaming variants, but a streaming method will always have a `Streaming` suffix in its name, even if it doesn't have a non-streaming variant.
-
-These streaming methods return [`IAsyncEnumerable`](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.iasyncenumerable-1):
-
-```csharp
-using System;
-using Dedalus.Models.Machines;
-
-MachineWatchParams parameters = new() { MachineID = "dm-3" };
-
-await foreach (var machine in client.Machines.WatchStreaming(parameters))
-{
-    Console.WriteLine(machine);
-}
-```
-
 ## Raw responses
 
 The SDK defines methods that deserialize responses into instances of C# classes. However, these methods don't provide access to the response headers, status code, or the raw response body.
@@ -127,7 +107,7 @@ The SDK defines methods that deserialize responses into instances of C# classes.
 To access this data, prefix any HTTP method call on a client or service with `WithRawResponse`:
 
 ```csharp
-var response = await client.WithRawResponse.Machines.Create(parameters);
+var response = await client.WithRawResponse.Machines.Create();
 var statusCode = response.StatusCode;
 var headers = response.Headers;
 ```
@@ -140,21 +120,9 @@ For non-streaming responses, you can deserialize the response into an instance o
 using System;
 using Dedalus.Models.Machines;
 
-var response = await client.WithRawResponse.Machines.Create(parameters);
+var response = await client.WithRawResponse.Machines.Create();
 Machine deserialized = await response.Deserialize();
 Console.WriteLine(deserialized);
-```
-
-For streaming responses, you can deserialize the response to an [`IAsyncEnumerable`](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.iasyncenumerable-1) if needed:
-
-```csharp
-using System;
-
-var response = await client.WithRawResponse.Machines.WatchStreaming(parameters);
-await foreach (var item in response.Enumerate())
-{
-    Console.WriteLine(item);
-}
 ```
 
 ## Error handling
@@ -175,8 +143,6 @@ The SDK throws custom unchecked exception types:
 | others | `DedalusUnexpectedStatusCodeException` |
 
 Additionally, all 4xx errors inherit from `Dedalus4xxException`.
-
-- `DedalusSseException`: thrown for errors encountered during [SSE streaming](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) after a successful initial HTTP response.
 
 - `DedalusIOException`: I/O networking errors.
 
@@ -342,7 +308,7 @@ MachineCreateParams parameters = new
 {
     // Documented properties can still be added here.
     // In case of conflict, these parameters take precedence over the custom parameters.
-    MemoryMiB = 0
+    MemoryMiB = 1
 };
 ```
 
@@ -353,9 +319,9 @@ This can also be used to set a documented parameter to an undocumented or not ye
 ```csharp
 using System.Collections.Generic;
 using System.Text.Json;
-using Dedalus.Models.Machines;
+using Dedalus.Models.Machines.Ssh;
 
-var parameters = MachineCreateParams.FromRawUnchecked
+var parameters = SshCreateParams.FromRawUnchecked
 (
 
     rawHeaderData: new Dictionary<string, JsonElement>(),
@@ -363,7 +329,7 @@ var parameters = MachineCreateParams.FromRawUnchecked
     rawBodyData: new Dictionary<string, JsonElement>
     {
         {
-            "memory_mib",
+            "public_key",
             JsonSerializer.SerializeToElement("custom value")
         }
     }
@@ -377,7 +343,7 @@ To access undocumented response properties, the `RawData` property can be used:
 ```csharp
 using System.Text.Json;
 
-var response = client.Machines.Create(parameters)
+var response = client.Machines.Create()
 if (response.RawData.TryGetValue("my_custom_key", out JsonElement value))
 {
     // Do something with `value`
@@ -395,7 +361,7 @@ By default, the SDK will not throw an exception in this case. It will throw `Ded
 If you would prefer to check that the response is completely well-typed upfront, then either call `Validate`:
 
 ```csharp
-var machine = client.Machines.Create(parameters);
+var machine = client.Machines.Create();
 machine.Validate();
 ```
 

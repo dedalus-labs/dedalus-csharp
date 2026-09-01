@@ -10,12 +10,12 @@ public class SshListParamsTest : TestBase
     {
         var parameters = new SshListParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             Cursor = "cursor",
             Limit = 0,
         };
 
-        string expectedMachineID = "dm-3";
+        string expectedMachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c";
         string expectedCursor = "cursor";
         long expectedLimit = 0;
 
@@ -27,7 +27,10 @@ public class SshListParamsTest : TestBase
     [Fact]
     public void OptionalNonNullableParamsUnsetAreNotSet_Works()
     {
-        var parameters = new SshListParams { MachineID = "dm-3" };
+        var parameters = new SshListParams
+        {
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+        };
 
         Assert.Null(parameters.Cursor);
         Assert.False(parameters.RawQueryData.ContainsKey("cursor"));
@@ -40,7 +43,7 @@ public class SshListParamsTest : TestBase
     {
         var parameters = new SshListParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
 
             // Null should be interpreted as omitted for these properties
             Cursor = null,
@@ -58,7 +61,7 @@ public class SshListParamsTest : TestBase
     {
         SshListParams parameters = new()
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             Cursor = "cursor",
             Limit = 0,
         };
@@ -67,7 +70,9 @@ public class SshListParamsTest : TestBase
 
         Assert.True(
             TestBase.UrisEqual(
-                new Uri("https://dcs.dedaluslabs.ai/v1/machines/dm-3/ssh?cursor=cursor&limit=0"),
+                new Uri(
+                    "https://dcs.dedaluslabs.ai/v1/machines/dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c/ssh?cursor=cursor&limit=0"
+                ),
                 url
             )
         );
@@ -78,7 +83,7 @@ public class SshListParamsTest : TestBase
     {
         var parameters = new SshListParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             Cursor = "cursor",
             Limit = 0,
         };

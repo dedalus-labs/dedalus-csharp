@@ -86,12 +86,6 @@ public sealed class DedalusClient : IDedalusClient
         return new DedalusClient(modifier(this._options));
     }
 
-    readonly Lazy<IUsageService> _usage;
-    public IUsageService Usage
-    {
-        get { return _usage.Value; }
-    }
-
     readonly Lazy<IMachineService> _machines;
     public IMachineService Machines
     {
@@ -105,7 +99,6 @@ public sealed class DedalusClient : IDedalusClient
         _options = new();
 
         _withRawResponse = new(() => new DedalusClientWithRawResponse(this._options));
-        _usage = new(() => new UsageService(this));
         _machines = new(() => new MachineService(this));
     }
 
@@ -194,12 +187,6 @@ public sealed class DedalusClientWithRawResponse : IDedalusClientWithRawResponse
     public IDedalusClientWithRawResponse WithOptions(Func<ClientOptions, ClientOptions> modifier)
     {
         return new DedalusClientWithRawResponse(modifier(this._options));
-    }
-
-    readonly Lazy<IUsageServiceWithRawResponse> _usage;
-    public IUsageServiceWithRawResponse Usage
-    {
-        get { return _usage.Value; }
     }
 
     readonly Lazy<IMachineServiceWithRawResponse> _machines;
@@ -417,7 +404,6 @@ public sealed class DedalusClientWithRawResponse : IDedalusClientWithRawResponse
     {
         _options = new();
 
-        _usage = new(() => new UsageServiceWithRawResponse(this));
         _machines = new(() => new MachineServiceWithRawResponse(this));
     }
 

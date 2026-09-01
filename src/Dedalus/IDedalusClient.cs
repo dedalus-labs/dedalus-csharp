@@ -64,8 +64,6 @@ public interface IDedalusClient : IDisposable
     /// </summary>
     IDedalusClient WithOptions(Func<ClientOptions, ClientOptions> modifier);
 
-    IUsageService Usage { get; }
-
     IMachineService Machines { get; }
 }
 
@@ -110,8 +108,6 @@ public interface IDedalusClientWithRawResponse : IDisposable
     /// <para>The original service is not modified.</para>
     /// </summary>
     IDedalusClientWithRawResponse WithOptions(Func<ClientOptions, ClientOptions> modifier);
-
-    IUsageServiceWithRawResponse Usage { get; }
 
     IMachineServiceWithRawResponse Machines { get; }
 

@@ -25,45 +25,6 @@ public record class MachineCreateParams : ParamsBase
     }
 
     /// <summary>
-    /// Memory in MiB.
-    /// </summary>
-    public required long MemoryMiB
-    {
-        get
-        {
-            this._rawBodyData.Freeze();
-            return this._rawBodyData.GetNotNullStruct<long>("memory_mib");
-        }
-        init { this._rawBodyData.Set("memory_mib", value); }
-    }
-
-    /// <summary>
-    /// Storage in GiB.
-    /// </summary>
-    public required long StorageGiB
-    {
-        get
-        {
-            this._rawBodyData.Freeze();
-            return this._rawBodyData.GetNotNullStruct<long>("storage_gib");
-        }
-        init { this._rawBodyData.Set("storage_gib", value); }
-    }
-
-    /// <summary>
-    /// CPU in vCPUs.
-    /// </summary>
-    public required double Vcpu
-    {
-        get
-        {
-            this._rawBodyData.Freeze();
-            return this._rawBodyData.GetNotNullStruct<double>("vcpu");
-        }
-        init { this._rawBodyData.Set("vcpu", value); }
-    }
-
-    /// <summary>
     /// Idle window before autosleep. Accepts fixed duration units like 30s, 30m,
     /// 2h, 7d3h4s, or 1w3d, raw seconds ("1800"), or never to disable.
     /// </summary>
@@ -82,6 +43,69 @@ public record class MachineCreateParams : ParamsBase
             }
 
             this._rawBodyData.Set("autosleep", value);
+        }
+    }
+
+    /// <summary>
+    /// Memory in MiB.
+    /// </summary>
+    public long? MemoryMiB
+    {
+        get
+        {
+            this._rawBodyData.Freeze();
+            return this._rawBodyData.GetNullableStruct<long>("memory_mib");
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawBodyData.Set("memory_mib", value);
+        }
+    }
+
+    /// <summary>
+    /// Storage in GiB.
+    /// </summary>
+    public long? StorageGiB
+    {
+        get
+        {
+            this._rawBodyData.Freeze();
+            return this._rawBodyData.GetNullableStruct<long>("storage_gib");
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawBodyData.Set("storage_gib", value);
+        }
+    }
+
+    /// <summary>
+    /// CPU in vCPUs.
+    /// </summary>
+    public double? Vcpu
+    {
+        get
+        {
+            this._rawBodyData.Freeze();
+            return this._rawBodyData.GetNullableStruct<double>("vcpu");
+        }
+        init
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            this._rawBodyData.Set("vcpu", value);
         }
     }
 

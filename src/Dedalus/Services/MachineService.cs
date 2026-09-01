@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Dedalus.Core;
@@ -34,23 +32,8 @@ public sealed class MachineService : IMachineService
         _client = client;
 
         _withRawResponse = new(() => new MachineServiceWithRawResponse(client.WithRawResponse));
-        _artifacts = new(() => new ArtifactService(client));
-        _previews = new(() => new PreviewService(client));
         _ssh = new(() => new SshService(client));
         _executions = new(() => new ExecutionService(client));
-        _terminals = new(() => new TerminalService(client));
-    }
-
-    readonly Lazy<IArtifactService> _artifacts;
-    public IArtifactService Artifacts
-    {
-        get { return _artifacts.Value; }
-    }
-
-    readonly Lazy<IPreviewService> _previews;
-    public IPreviewService Previews
-    {
-        get { return _previews.Value; }
     }
 
     readonly Lazy<ISshService> _ssh;
@@ -65,15 +48,9 @@ public sealed class MachineService : IMachineService
         get { return _executions.Value; }
     }
 
-    readonly Lazy<ITerminalService> _terminals;
-    public ITerminalService Terminals
-    {
-        get { return _terminals.Value; }
-    }
-
     /// <inheritdoc/>
     public async Task<Machine> Create(
-        MachineCreateParams parameters,
+        MachineCreateParams? parameters = null,
         CancellationToken cancellationToken = default
     )
     {
@@ -84,7 +61,7 @@ public sealed class MachineService : IMachineService
     }
 
     /// <inheritdoc/>
-    public async Task<Machine> Retrieve(
+    public async Task<MachineRetrieveResponse> Retrieve(
         MachineRetrieveParams parameters,
         CancellationToken cancellationToken = default
     )
@@ -154,21 +131,6 @@ public sealed class MachineService : IMachineService
             .ConfigureAwait(false);
         return await response.Deserialize(cancellationToken).ConfigureAwait(false);
     }
-
-    /// <inheritdoc/>
-    public async IAsyncEnumerable<Machine> WatchStreaming(
-        MachineWatchParams parameters,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default
-    )
-    {
-        using var response = await this
-            .WithRawResponse.WatchStreaming(parameters, cancellationToken)
-            .ConfigureAwait(false);
-        await foreach (var machine in response.Enumerate(cancellationToken))
-        {
-            yield return machine;
-        }
-    }
 }
 
 /// <inheritdoc/>
@@ -186,23 +148,8 @@ public sealed class MachineServiceWithRawResponse : IMachineServiceWithRawRespon
     {
         _client = client;
 
-        _artifacts = new(() => new ArtifactServiceWithRawResponse(client));
-        _previews = new(() => new PreviewServiceWithRawResponse(client));
         _ssh = new(() => new SshServiceWithRawResponse(client));
         _executions = new(() => new ExecutionServiceWithRawResponse(client));
-        _terminals = new(() => new TerminalServiceWithRawResponse(client));
-    }
-
-    readonly Lazy<IArtifactServiceWithRawResponse> _artifacts;
-    public IArtifactServiceWithRawResponse Artifacts
-    {
-        get { return _artifacts.Value; }
-    }
-
-    readonly Lazy<IPreviewServiceWithRawResponse> _previews;
-    public IPreviewServiceWithRawResponse Previews
-    {
-        get { return _previews.Value; }
     }
 
     readonly Lazy<ISshServiceWithRawResponse> _ssh;
@@ -217,18 +164,14 @@ public sealed class MachineServiceWithRawResponse : IMachineServiceWithRawRespon
         get { return _executions.Value; }
     }
 
-    readonly Lazy<ITerminalServiceWithRawResponse> _terminals;
-    public ITerminalServiceWithRawResponse Terminals
-    {
-        get { return _terminals.Value; }
-    }
-
     /// <inheritdoc/>
     public async Task<HttpResponse<Machine>> Create(
-        MachineCreateParams parameters,
+        MachineCreateParams? parameters = null,
         CancellationToken cancellationToken = default
     )
     {
+        parameters ??= new();
+
         HttpRequest<MachineCreateParams> request = new()
         {
             Method = HttpMethod.Post,
@@ -250,7 +193,7 @@ public sealed class MachineServiceWithRawResponse : IMachineServiceWithRawRespon
     }
 
     /// <inheritdoc/>
-    public async Task<HttpResponse<Machine>> Retrieve(
+    public async Task<HttpResponse<MachineRetrieveResponse>> Retrieve(
         MachineRetrieveParams parameters,
         CancellationToken cancellationToken = default
     )
@@ -265,7 +208,9 @@ public sealed class MachineServiceWithRawResponse : IMachineServiceWithRawRespon
             response,
             async (token) =>
             {
-                var machine = await response.Deserialize<Machine>(token).ConfigureAwait(false);
+                var machine = await response
+                    .Deserialize<MachineRetrieveResponse>(token)
+                    .ConfigureAwait(false);
                 if (this._client.ResponseValidation)
                 {
                     machine.Validate();
@@ -405,32 +350,5 @@ public sealed class MachineServiceWithRawResponse : IMachineServiceWithRawRespon
                 return machine;
             }
         );
-    }
-
-    /// <inheritdoc/>
-    public async Task<StreamingHttpResponse<Machine>> WatchStreaming(
-        MachineWatchParams parameters,
-        CancellationToken cancellationToken = default
-    )
-    {
-        HttpRequest<MachineWatchParams> request = new()
-        {
-            Method = HttpMethod.Get,
-            Params = parameters,
-        };
-        var response = await this._client.Execute(request, cancellationToken).ConfigureAwait(false);
-
-        async IAsyncEnumerable<Machine> Enumerate([EnumeratorCancellation] CancellationToken token)
-        {
-            await foreach (var machine in Sse.Enumerate<Machine>(response.RawMessage, token))
-            {
-                if (this._client.ResponseValidation)
-                {
-                    machine.Validate();
-                }
-                yield return machine;
-            }
-        }
-        return new(response, Enumerate);
     }
 }

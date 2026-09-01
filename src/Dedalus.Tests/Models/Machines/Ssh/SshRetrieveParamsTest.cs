@@ -8,9 +8,13 @@ public class SshRetrieveParamsTest : TestBase
     [Fact]
     public void FieldRoundtrip_Works()
     {
-        var parameters = new SshRetrieveParams { MachineID = "dm-3", SessionID = "session_id" };
+        var parameters = new SshRetrieveParams
+        {
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+            SessionID = "session_id",
+        };
 
-        string expectedMachineID = "dm-3";
+        string expectedMachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c";
         string expectedSessionID = "session_id";
 
         Assert.Equal(expectedMachineID, parameters.MachineID);
@@ -20,13 +24,19 @@ public class SshRetrieveParamsTest : TestBase
     [Fact]
     public void Url_Works()
     {
-        SshRetrieveParams parameters = new() { MachineID = "dm-3", SessionID = "session_id" };
+        SshRetrieveParams parameters = new()
+        {
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+            SessionID = "session_id",
+        };
 
         var url = parameters.Url(new() { ApiKey = "My API Key" });
 
         Assert.True(
             TestBase.UrisEqual(
-                new Uri("https://dcs.dedaluslabs.ai/v1/machines/dm-3/ssh/session_id"),
+                new Uri(
+                    "https://dcs.dedaluslabs.ai/v1/machines/dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c/ssh/session_id"
+                ),
                 url
             )
         );
@@ -35,7 +45,11 @@ public class SshRetrieveParamsTest : TestBase
     [Fact]
     public void CopyConstructor_Works()
     {
-        var parameters = new SshRetrieveParams { MachineID = "dm-3", SessionID = "session_id" };
+        var parameters = new SshRetrieveParams
+        {
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
+            SessionID = "session_id",
+        };
 
         SshRetrieveParams copied = new(parameters);
 

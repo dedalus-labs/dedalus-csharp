@@ -10,11 +10,11 @@ public class ExecutionOutputParamsTest : TestBase
     {
         var parameters = new ExecutionOutputParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             ExecutionID = "execution_id",
         };
 
-        string expectedMachineID = "dm-3";
+        string expectedMachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c";
         string expectedExecutionID = "execution_id";
 
         Assert.Equal(expectedMachineID, parameters.MachineID);
@@ -26,7 +26,7 @@ public class ExecutionOutputParamsTest : TestBase
     {
         ExecutionOutputParams parameters = new()
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             ExecutionID = "execution_id",
         };
 
@@ -35,7 +35,7 @@ public class ExecutionOutputParamsTest : TestBase
         Assert.True(
             TestBase.UrisEqual(
                 new Uri(
-                    "https://dcs.dedaluslabs.ai/v1/machines/dm-3/executions/execution_id/output"
+                    "https://dcs.dedaluslabs.ai/v1/machines/dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c/executions/execution_id/output"
                 ),
                 url
             )
@@ -47,7 +47,7 @@ public class ExecutionOutputParamsTest : TestBase
     {
         var parameters = new ExecutionOutputParams
         {
-            MachineID = "dm-3",
+            MachineID = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c",
             ExecutionID = "execution_id",
         };
 
